@@ -1,0 +1,21 @@
+{
+  "name": "isnote",
+  "version": "0.1.0",
+  "description": "Open-source ink notebook with graphs, equations and dynamic geometry. Runs in any browser and installs on iPad as a PWA.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build && node scripts/gen-precache.mjs",
+    "preview": "vite preview --host",
+    "test": "node --test --experimental-strip-types test/*.test.ts"
+  },
+  "dependencies": {
+    "@mathjax/src": "^4.1.3",
+    "pdfjs-dist": "^4.10.38"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vite": "^6.0.0"
+  }
+}

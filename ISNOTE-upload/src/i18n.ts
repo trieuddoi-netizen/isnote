@@ -1,0 +1,103 @@
+export type Lang = "vi" | "en";
+
+const S = {
+  en: {
+    pen: "Pen", highlighter: "Highlighter", eraser: "Eraser", select: "Move", formula: "Formula", graph: "Graph",
+    point: "Point", segment: "Segment", circle: "Circle", undo: "Undo", redo: "Redo", del: "Delete",
+    newDoc: "New", open: "Open…", save: "Save", png: "PNG", pdf: "PDF", addPage: "+ Page", delPage: "Delete page",
+    prev: "Previous page", next: "Next page", finger: "Draw with finger", ok: "OK", cancel: "Cancel",
+    latex: "LaTeX", size: "Size", functions: "Functions of x (one per line)", editFormula: "Formula", editGraph: "Graph",
+    confirmNew: "Discard the current notebook?", confirmDelPage: "Delete this page?", saved: "Saved", openFailed: "Could not open file",
+    invalid: "Invalid LaTeX", exportFailed: "Export failed", help: "Install on iPad: Share → Add to Home Screen",
+    shape: "Shapes", solid: "3D solids", rotation: "Rotation (°)", fill: "Fill", yaw: "Turn left/right", pitch: "Tilt up/down", roll: "Roll", shade: "Shading", lineWidth: "Line width",
+    rect: "Rectangle", square: "Square", triangle: "Triangle", rtriangle: "Right triangle", ellipse: "Ellipse", pentagon: "Pentagon", hexagon: "Hexagon", star: "Star", rhombus: "Rhombus", trapezoid: "Trapezoid", parallelogram: "Parallelogram", arrow: "Arrow",
+    cube: "Cube", box: "Box", pyramid: "Pyramid", tetra: "Tetrahedron", prism: "Prism", cone: "Cone", cylinder: "Cylinder", sphere: "Sphere", edit: "Edit properties", rotHint: "Orange handle: drag to rotate in 3D. Green: resize.",
+    paint: "Paint faces", surf: "Points & lines on solid", unfold: "Unfold (net)", revolve: "Solid of revolution", noNet: "This solid has no flat net", thin: "Thinner lines", thick: "Thicker lines",
+    labels: "Vertex names", clearMarks: "Remove added points and lines", expr: "Function", from: "From", to: "To", axisX: "Spin about Ox: y = f(x)", axisY: "Spin about Oy: radius = f(y)", rings: "Rings", volume: "Volume",
+    rotL: "Turn left", rotR: "Turn right", rotU: "Tilt up", rotD: "Tilt down", rotCW: "Rotate clockwise", rotCCW: "Rotate counter-clockwise", surfHint: "Tap a vertex, midpoint, face centre or any point on a face; tap a second point to join them.",
+    paintHint: "Tap a face to colour it with the current colour (tap again to clear).", pickGraph: "Select a graph first", pickSolid: "Select a solid first", fnFrom: "Function from graph",
+    laser: "Laser pointer", lasso: "Select (free shape)", rectSel: "Select (rectangle)", text: "Text", fillTool: "Fill region", lineTool: "Line",
+    ballpoint: "Ballpoint", felt: "Felt-tip", fountain: "Fountain pen", pencil: "Pencil", brush: "Brush",
+    smooth: "Smoothing", pressure: "Pen pressure", inkMode: "Ink mode", modeInk: "Ink", modeLine: "Ink to line", modeShape: "Ink to shape",
+    solid_: "Solid", dashed: "Dashed", dashdot: "Dash-dot", arrowEnd: "Arrow", doubleArrow: "Double arrow", lineStyle: "Line style",
+    copy: "Copy", cut: "Cut", paste: "Paste", duplicate: "Duplicate",
+    font: "Font", bold: "Bold", italic: "Italic", underline: "Underline", alignL: "Left", alignC: "Center", alignR: "Right", bullets: "Bullets", boxWidth: "Box width", fontSans: "Sans", fontSerif: "Serif", fontMono: "Mono", fontHand: "Handwriting", textHint: "Type the text",
+    paper: "Paper", paperType: "Paper type", plain: "Plain", ruled: "Ruled", squared: "Squared", dotted: "Dotted", paperColor: "Paper colour", portrait: "Portrait", landscape: "Landscape", spacing: "Line spacing", applyAll: "Apply to all pages",
+    insertPicture: "Picture", importPdf: "Import PDF", pdfBusy: "Reading PDF…", pdfFailed: "Could not read this PDF", pdfPages: "PDF pages imported", imgFailed: "Could not load this picture", clearBg: "Remove background",
+    zoomIn: "Zoom in", zoomOut: "Zoom out", fitWidth: "Fit width", pageList: "Pages", goPage: "Go to page", fillFail: "This area is not closed — close the outline first",
+    hyperbola: "Hyperbola", parabola: "Parabola", annulus: "Annulus (ring)",
+    octahedron: "Octahedron", frustum: "Frustum of pyramid", frustumcone: "Frustum of cone", truncyl: "Truncated cylinder", cap: "Spherical cap",
+    menu: "Menu", settings: "Settings", penOptions: "Pen options", customColor: "Custom colour", dashedLine: "Dashed line", geometry: "Geometry", instruments: "Instruments", selectMenu: "Select", fitWord: "Fit", penKind: "Pen type",
+    sectionLines: "Lines", sectionPlane: "Plane figures", sectionSolids: "Solids", geoBasic: "Basic", geoConstruct: "Constructions", geoTransform: "Transformations", geoMeasure: "Marks & measures", geoShow: "Show / hide",
+    lineGeo: "Line", ray: "Ray", midpoint: "Midpoint", perpendicular: "Perpendicular line", parallel: "Parallel line", altitude: "Altitude (foot)", intersection: "Intersection", bisector: "Angle bisector",
+    centroid: "Centroid", orthocenter: "Orthocentre", circumcenter: "Circumcentre", incenter: "Incentre", circumcircle: "Circumcircle", reflectLine: "Reflect in line", reflectPoint: "Reflect in point", translate: "Translate (vector)", rotate: "Rotate about point", dilate: "Dilate from point",
+    angle: "Angle measure", rightAngle: "Right-angle mark", equalMark: "Equal-length mark", polygon: "Polygon", angleDeg: "Angle °", factor: "Factor k", hideNames: "Hide names", hideHelpers: "Hide helper lines", toggleName: "Show/hide name", toggleDot: "Show/hide dot", toggleHelper: "Helper line (dashed)",
+    ruler: "Ruler", protractor: "Protractor", instSquare: "Set-square", compass: "Compass", insertSpace: "Insert space", clearPage: "Clear page", input_auto: "Auto (pen draws, finger scrolls)", input_both: "Pen and finger draw", input_pen: "Pen only (finger scrolls)", input_finger: "Finger only", general: "General", themeToggle: "Light / dark",
+    newSheet: "New sheet", renameSheet: "Rename sheet", deleteSheet: "Delete sheet", sheetName: "Sheet name", pointOnGraph: "Point on graph (tap a curve)", xIntercepts: "x-intercepts", yIntercept: "y-intercept", extrema: "Extrema", intersections: "Intersections", legend: "Legend", scale11: "1:1 scale", approxNet: "≈ approximate net", ineqs: "Inequalities (one per line, e.g. y > x^2 - 1)", gridStep: "Grid step x / y (0 = auto)", axisSize: "Axis text size", askNew: "New", spaceHint: "Drag down to insert space; drag up to remove it", geoPick: "Pick", instHint: "Draw along an instrument's edge with the pen.",
+    hand: "Hand (pan)", inputMode: "Input mode", notebook: "Notebook (blue rules, margin)",
+    moveToolbar: "Move toolbar (hold for settings)", rotateMode: "Writing / rotate mode", pencilDouble: "Pencil double-tap does", pencil_eraser: "Eraser and back", pencil_previous: "Previous tool", pencil_rotate: "Writing ↔ rotate", pencil_color: "Next pen colour",
+    toolbarSettings: "Toolbar", toolbarSize: "Size", dock_top: "Top", dock_bottom: "Bottom", dock_left: "Left", dock_right: "Right", dock_float: "Floating", hideToolbar: "Hide toolbar", showToolbar: "Show toolbar", resetToolbar: "Reset toolbar", shortcutsHelp: "Keyboard shortcuts", quickSwitch: "Quick switch (double-tap = Pencil double-tap)", noneTool: "No tool: drag scrolls, tap selects",
+    foldPlay: "Play", foldPause: "Pause", foldLoop: "Loop", foldSpeed: "Speed", foldAmount: "Fold (0 = flat net, 1 = solid)", noFold: "No animated model for this solid: showing the flat net", foldModel: "Folding model",
+    copyNet: "Copy net",
+    eraserStroke: "Stroke eraser (whole object)", eraserSmall: "Segment eraser: small", eraserMedium: "Segment eraser: medium", eraserLarge: "Segment eraser: large",
+    spinPlay: "Auto-rotate (Space)", spinSpeed: "Rotation speed", spinAxis: "Rotation axis", spinDir: "Direction", exportFrame: "Export this frame (PNG)", spin_yaw: "Vertical axis", spin_pitch: "Horizontal axis", spin_roll: "Roll", spin_tumble: "Free tumble", autoRotate: "Auto-rotate",
+    planeMode: "Plane through marks (section)", outerOnly: "Paint outer faces only", planeNotFlat: "These points are not in one plane", planeHint: "Tap 3 or more marks, then Enter (or tap the first mark) to close the plane", planeAdded: "Section added",
+    lang: "Tiếng Việt", title: "Title", color: "Color", width: "Width", fnError: "Cannot read this expression",
+  },
+  vi: {
+    pen: "Bút", highlighter: "Bút dạ", eraser: "Tẩy", select: "Di chuyển", formula: "Công thức", graph: "Đồ thị",
+    point: "Điểm", segment: "Đoạn thẳng", circle: "Đường tròn", undo: "Hoàn tác", redo: "Làm lại", del: "Xóa",
+    newDoc: "Mới", open: "Mở…", save: "Lưu", png: "PNG", pdf: "PDF", addPage: "+ Trang", delPage: "Xóa trang",
+    prev: "Trang trước", next: "Trang sau", finger: "Vẽ bằng ngón tay", ok: "OK", cancel: "Hủy",
+    latex: "LaTeX", size: "Cỡ chữ", functions: "Hàm theo x (mỗi dòng một hàm)", editFormula: "Công thức", editGraph: "Đồ thị",
+    confirmNew: "Bỏ sổ hiện tại?", confirmDelPage: "Xóa trang này?", saved: "Đã lưu", openFailed: "Không mở được tệp",
+    invalid: "LaTeX không hợp lệ", exportFailed: "Xuất thất bại", help: "Cài trên iPad: Chia sẻ → Thêm vào MH chính",
+    shape: "Hình có sẵn", solid: "Hình khối", rotation: "Góc xoay (°)", fill: "Tô màu", yaw: "Xoay trái/phải", pitch: "Nghiêng lên/xuống", roll: "Xoay phẳng", shade: "Tô bóng", lineWidth: "Độ dày nét",
+    rect: "Chữ nhật", square: "Vuông", triangle: "Tam giác", rtriangle: "Tam giác vuông", ellipse: "Elip", pentagon: "Ngũ giác", hexagon: "Lục giác", star: "Ngôi sao", rhombus: "Thoi", trapezoid: "Hình thang", parallelogram: "Bình hành", arrow: "Mũi tên",
+    cube: "Lập phương", box: "Hộp chữ nhật", pyramid: "Chóp tứ giác", tetra: "Tứ diện", prism: "Lăng trụ", cone: "Hình nón", cylinder: "Hình trụ", sphere: "Hình cầu", edit: "Sửa thuộc tính", rotHint: "Nút cam: kéo để xoay 3D. Nút xanh lá: đổi cỡ.",
+    paint: "Tô màu mặt", surf: "Điểm & đường trên khối", unfold: "Trải phẳng", revolve: "Khối tròn xoay", noNet: "Hình này không trải phẳng được", thin: "Nét mảnh hơn", thick: "Nét đậm hơn",
+    labels: "Tên đỉnh", clearMarks: "Xóa điểm và đường đã thêm", expr: "Hàm số", from: "Từ", to: "Đến", axisX: "Quay quanh Ox: y = f(x)", axisY: "Quay quanh Oy: bán kính = f(y)", rings: "Số vòng", volume: "Thể tích",
+    rotL: "Xoay trái", rotR: "Xoay phải", rotU: "Nghiêng lên", rotD: "Nghiêng xuống", rotCW: "Xoay thuận chiều kim đồng hồ", rotCCW: "Xoay ngược chiều kim đồng hồ", surfHint: "Chạm đỉnh, trung điểm, tâm mặt hoặc điểm bất kỳ trên mặt; chạm điểm thứ hai để nối.",
+    paintHint: "Chạm vào mặt để tô màu đang chọn (chạm lại để xóa màu).", pickGraph: "Hãy chọn một đồ thị trước", pickSolid: "Hãy chọn một hình khối trước", fnFrom: "Hàm lấy từ đồ thị",
+    laser: "Bút laser", lasso: "Chọn (tự do)", rectSel: "Chọn (hình chữ nhật)", text: "Văn bản", fillTool: "Tô vùng kín", lineTool: "Đường thẳng",
+    ballpoint: "Bút bi", felt: "Bút lông kim", fountain: "Bút mực", pencil: "Bút chì", brush: "Cọ",
+    smooth: "Làm mượt", pressure: "Lực nhấn bút", inkMode: "Chế độ viết", modeInk: "Viết tay", modeLine: "Nét → đường thẳng", modeShape: "Nét → hình",
+    solid_: "Liền", dashed: "Nét đứt", dashdot: "Chấm gạch", arrowEnd: "Mũi tên", doubleArrow: "Mũi tên đôi", lineStyle: "Kiểu nét",
+    copy: "Sao chép", cut: "Cắt", paste: "Dán", duplicate: "Nhân đôi",
+    font: "Phông", bold: "Đậm", italic: "Nghiêng", underline: "Gạch chân", alignL: "Trái", alignC: "Giữa", alignR: "Phải", bullets: "Gạch đầu dòng", boxWidth: "Độ rộng khung", fontSans: "Không chân", fontSerif: "Có chân", fontMono: "Đơn cách", fontHand: "Viết tay", textHint: "Nhập văn bản",
+    paper: "Giấy", paperType: "Loại giấy", plain: "Trắng", ruled: "Kẻ ngang", squared: "Ô vuông", dotted: "Chấm", paperColor: "Màu giấy", portrait: "Dọc", landscape: "Ngang", spacing: "Khoảng cách dòng", applyAll: "Áp dụng cho mọi trang",
+    insertPicture: "Ảnh", importPdf: "Nhập PDF", pdfBusy: "Đang đọc PDF…", pdfFailed: "Không đọc được tệp PDF", pdfPages: "Đã nhập trang PDF", imgFailed: "Không mở được ảnh", clearBg: "Bỏ nền",
+    zoomIn: "Phóng to", zoomOut: "Thu nhỏ", fitWidth: "Vừa chiều rộng", pageList: "Danh sách trang", goPage: "Đến trang", fillFail: "Vùng này chưa kín — hãy khép nét viền lại",
+    hyperbola: "Hypebol", parabola: "Parabol", annulus: "Hình vành khuyên",
+    octahedron: "Bát diện đều", frustum: "Chóp cụt", frustumcone: "Nón cụt", truncyl: "Trụ cụt", cap: "Chỏm cầu",
+    menu: "Trình đơn", settings: "Cài đặt", penOptions: "Tùy chọn bút", customColor: "Màu tùy chọn", dashedLine: "Nét đứt", geometry: "Hình học", instruments: "Dụng cụ", selectMenu: "Chọn", fitWord: "Vừa", penKind: "Loại bút",
+    sectionLines: "Đường thẳng", sectionPlane: "Hình phẳng", sectionSolids: "Hình khối", geoBasic: "Cơ bản", geoConstruct: "Dựng hình", geoTransform: "Phép biến hình", geoMeasure: "Ký hiệu & số đo", geoShow: "Hiện / ẩn",
+    lineGeo: "Đường thẳng", ray: "Tia", midpoint: "Trung điểm", perpendicular: "Đường vuông góc", parallel: "Đường song song", altitude: "Đường cao (chân)", intersection: "Giao điểm", bisector: "Phân giác",
+    centroid: "Trọng tâm", orthocenter: "Trực tâm", circumcenter: "Tâm ngoại tiếp", incenter: "Tâm nội tiếp", circumcircle: "Đường tròn ngoại tiếp", reflectLine: "Đối xứng qua đường", reflectPoint: "Đối xứng qua điểm", translate: "Tịnh tiến (vectơ)", rotate: "Quay quanh điểm", dilate: "Vị tự",
+    angle: "Số đo góc", rightAngle: "Ký hiệu góc vuông", equalMark: "Ký hiệu độ dài bằng nhau", polygon: "Đa giác", angleDeg: "Góc °", factor: "Tỉ số k", hideNames: "Ẩn tên điểm", hideHelpers: "Ẩn nét phụ", toggleName: "Hiện/ẩn tên", toggleDot: "Hiện/ẩn chấm", toggleHelper: "Nét phụ (đứt)",
+    ruler: "Thước thẳng", protractor: "Thước đo độ", instSquare: "Ê ke", compass: "Compa", insertSpace: "Chèn khoảng trống", clearPage: "Xóa cả trang", input_auto: "Tự động (bút vẽ, ngón tay cuộn)", input_both: "Bút và ngón tay đều vẽ", input_pen: "Chỉ bút (ngón tay cuộn)", input_finger: "Chỉ ngón tay", general: "Chung", themeToggle: "Sáng / tối",
+    newSheet: "Trang tính mới", renameSheet: "Đổi tên trang tính", deleteSheet: "Xóa trang tính", sheetName: "Tên trang tính", pointOnGraph: "Điểm trên đồ thị (chạm vào đường cong)", xIntercepts: "Giao trục Ox", yIntercept: "Giao trục Oy", extrema: "Cực trị", intersections: "Giao điểm", legend: "Chú giải", scale11: "Tỉ lệ 1:1", approxNet: "≈ trải phẳng gần đúng", ineqs: "Bất phương trình (mỗi dòng một cái, vd y > x^2 - 1)", gridStep: "Bước lưới x / y (0 = tự động)", axisSize: "Cỡ chữ trục", askNew: "Mới", spaceHint: "Kéo xuống để chèn khoảng trống; kéo lên để bớt", geoPick: "Chọn", instHint: "Vẽ dọc mép dụng cụ bằng bút.",
+    hand: "Bàn tay (cuộn trang)", inputMode: "Chế độ nhập", notebook: "Vở kẻ ngang (có lề)",
+    moveToolbar: "Di chuyển thanh công cụ (giữ để mở cài đặt)", rotateMode: "Chế độ viết / xoay", pencilDouble: "Chạm đúp bút Pencil sẽ", pencil_eraser: "Chuyển sang tẩy rồi quay lại", pencil_previous: "Công cụ trước", pencil_rotate: "Viết ↔ xoay", pencil_color: "Màu bút kế tiếp",
+    toolbarSettings: "Thanh công cụ", toolbarSize: "Cỡ", dock_top: "Trên", dock_bottom: "Dưới", dock_left: "Trái", dock_right: "Phải", dock_float: "Nổi", hideToolbar: "Ẩn thanh công cụ", showToolbar: "Hiện thanh công cụ", resetToolbar: "Đặt lại thanh công cụ", shortcutsHelp: "Phím tắt", quickSwitch: "Nút đổi nhanh (chạm đúp = chạm đúp bút Pencil)", noneTool: "Không công cụ: kéo để cuộn, chạm để chọn",
+    foldPlay: "Chạy", foldPause: "Tạm dừng", foldLoop: "Lặp lại", foldSpeed: "Tốc độ", foldAmount: "Độ gấp (0 = trải phẳng, 1 = hình khối)", noFold: "Hình này chưa có mô hình động: hiển thị bản trải phẳng", foldModel: "Mô hình gấp",
+    copyNet: "Sao chép lưới",
+    eraserStroke: "Tẩy cả nét (cả đối tượng)", eraserSmall: "Tẩy từng đoạn: nhỏ", eraserMedium: "Tẩy từng đoạn: vừa", eraserLarge: "Tẩy từng đoạn: lớn",
+    spinPlay: "Tự xoay (Space)", spinSpeed: "Tốc độ xoay", spinAxis: "Trục xoay", spinDir: "Chiều xoay", exportFrame: "Xuất khung hình này (PNG)", spin_yaw: "Trục đứng", spin_pitch: "Trục ngang", spin_roll: "Xoay phẳng", spin_tumble: "Lăn tự do", autoRotate: "Tự xoay",
+    planeMode: "Mặt phẳng qua các điểm (thiết diện)", outerOnly: "Chỉ tô mặt ngoài", planeNotFlat: "Các điểm này không cùng một mặt phẳng", planeHint: "Chạm từ 3 điểm trở lên, rồi Enter (hoặc chạm lại điểm đầu) để đóng mặt phẳng", planeAdded: "Đã thêm thiết diện",
+    lang: "English", title: "Tiêu đề", color: "Màu", width: "Nét", fnError: "Không đọc được biểu thức",
+  },
+} as const;
+
+export type Key = keyof (typeof S)["en"];
+let lang: Lang = (() => {
+  try { const v = localStorage.getItem("openink-lang"); if (v === "vi" || v === "en") return v; } catch { /* ignore */ }
+  return navigator.language.toLowerCase().startsWith("vi") ? "vi" : "en";
+})();
+
+export const getLang = (): Lang => lang;
+export function setLang(l: Lang): void {
+  lang = l;
+  try { localStorage.setItem("openink-lang", l); } catch { /* ignore */ }
+}
+export const t = (k: Key): string => S[lang][k];
