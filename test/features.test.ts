@@ -988,3 +988,15 @@ test("sections: picking prefers the smallest region under the pointer; hidden lo
   // fully faded interior sections cannot be picked
   assert.equal(pickSection({ ...s, fold: 0 }, cx, cy)?.marks.join() === small.marks.join(), false);
 });
+
+import { smoothPressure } from "../src/pen.ts";
+test("pen widths and pressure are smoothed so strokes look smooth", () => {
+  assert.equal(smoothPressure(0.5, 1), 0.7);
+  const pts: number[] = [], pr: number[] = [];
+  for (let i = 0; i < 40; i++) { pts.push(i * 3, 0); pr.push(i % 2 ? 0.9 : 0.2); } // jittery pressure
+  const w = strokeWidths("ballpoint", pts, 4, pr);
+  const raw = Math.max(...pr) - Math.min(...pr);
+  let maxStep = 0; for (let i = 1; i < w.length - 1; i++) maxStep = Math.max(maxStep, Math.abs(w[i] - w[i - 1]));
+  assert.ok(maxStep < 4 * raw * 1.3 * 0.5, `width steps are damped (${maxStep.toFixed(2)})`);
+  assert.ok(w.every((v) => v > 0 && Number.isFinite(v)));
+});

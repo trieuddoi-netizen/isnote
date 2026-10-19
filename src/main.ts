@@ -2,7 +2,7 @@ import "./style.css";
 import { LINE_STYLES, PEN_KINDS, SHAPE_KINDS, SOLID_KINDS, clone, findPoint, hit, moveObject, newDoc, removeObject, uid, type Doc, type GeoPoint, type Graph, type ImageObj, type Line, type LineStyle, type Mark, type Net, type Obj, type Page, type PenKind, type Revolve, type Shape, type ShapeKind, type Solid, type SolidKind, type Stroke, type TextObj } from "./model.ts";
 import { THEME, drawPage, handlesOf, preloadImages, solidScale } from "./render.ts";
 import { PAPER_COLORS, PAPER_TYPES, defaultPaper, normPaper, pageDims, type Paper, type PaperType } from "./paper.ts";
-import { MAX_SMOOTH, LASER_TTL, laserAlpha, pruneLaser, smoothStep, type LaserPt } from "./pen.ts";
+import { smoothPressure, MAX_SMOOTH, LASER_TTL, laserAlpha, pruneLaser, smoothStep, type LaserPt } from "./pen.ts";
 import { recognize } from "./recognize.ts";
 import { floodFill } from "./fill.ts";
 import { boundsOf, rectPolygon, selectIn } from "./bounds.ts";
@@ -43,7 +43,7 @@ let pageIdx = 0;
 let tool: Tool = "pen";
 let color = COLORS[0];
 let hlColor = HL_COLORS[0];
-let inputMode: InputMode = (() => { try { const v = localStorage.getItem("openink-input"); if (v === "auto" || v === "both" || v === "pen" || v === "finger") return v; } catch { /* ignore */ } return "auto"; })();
+let inputMode: InputMode = (() => { try { const v = localStorage.getItem("openink-input"); if (v === "auto" || v === "both" || v === "pen" || v === "finger") return v; } catch { /* ignore */ } return "pen"; })(); // default: the pencil writes, a finger only scrolls (palm rejection)
 let geoKind = "midpoint";
 let geoPicks: string[] = [];
 let geoRotDeg = 90, geoDilK = 2;
@@ -71,7 +71,7 @@ let pendingPoint: string | null = null; // first click of segment/circle
 let rubber: { x: number; y: number } | null = null;
 let pendingMark: { id: string; mark: string } | null = null; // first point of a line being drawn on a solid
 let penKind: PenKind = "ballpoint";
-let smoothLevel = 1;
+let smoothLevel = 2;
 let pressureOn = true;
 let inkMode: InkMode = "ink";
 let lineStyle: LineStyle = "solid";
@@ -408,7 +408,7 @@ function moveGesture() {
 function pointerRole(e: PointerEvent): "draw" | "pan" | null {
   if (e.pointerType === "pen") { lastPenTime = performance.now(); return inputMode === "finger" ? null : "draw"; }
   if (e.pointerType === "touch") {
-    if (performance.now() - lastPenTime < 900) return null; // palm resting while the pen is in use
+    if (palmLike(e)) return null;
     if (inputMode === "both" || inputMode === "finger") return "draw";
     if (inputMode === "pen") return "pan";
     return INK_TOOLS.has(tool) ? "pan" : "draw"; // auto: finger scrolls when the tool would ink, otherwise it works like the pen
@@ -416,7 +416,19 @@ function pointerRole(e: PointerEvent): "draw" | "pan" | null {
   return "draw";
 }
 
+/** Palm rejection: while the Pencil is touching or hovering (and shortly after), or for a large contact patch, touches are ignored completely. */
+let penDown = false;
+const PALM_MS = 1600;
+function palmLike(e: PointerEvent): boolean {
+  if (e.pointerType !== "touch" || inputMode === "finger") return false;
+  return penDown || performance.now() - lastPenTime < PALM_MS || e.width > 40 || e.height > 40;
+}
 cv.addEventListener("pointerdown", (e) => {
+  if (e.pointerType === "pen") { // the pen wins: anything a resting hand started is dropped
+    lastPenTime = performance.now(); penDown = true;
+    if (touches.size || gesture || (drag && drag.kind === "pan")) { touches.clear(); gesture = null; if (drag && drag.kind === "pan") drag = null; }
+  }
+  if (e.pointerType === "touch" && palmLike(e)) return;
   if (e.pointerType === "touch") {
     touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (touches.size === 2) { cv.setPointerCapture(e.pointerId); startGesture(); return; }
@@ -614,6 +626,8 @@ cv.addEventListener("pointerdown", (e) => {
 });
 
 cv.addEventListener("pointermove", (e) => {
+  if (e.pointerType === "pen") lastPenTime = performance.now(); // hovering counts as "pen in use"
+  if (e.pointerType === "touch" && !touches.has(e.pointerId) && palmLike(e)) return;
   if (e.pointerType === "touch" && touches.has(e.pointerId)) {
     touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (gesture) { moveGesture(); return; }
@@ -634,7 +648,7 @@ cv.addEventListener("pointermove", (e) => {
       const q = guide ? projectOnGuide(guide, [p.x, p.y]) : [p.x, p.y]; // instruments: the pen follows the edge
       const sm = smoothStep(lastSmooth ?? [lx, ly], [q[0], q[1]], guide ? 0 : smoothLevel);
       lastSmooth = sm; rawPts.push(q[0], q[1]);
-      if ((sm[0] - lx) ** 2 + (sm[1] - ly) ** 2 >= 1.2) { pts.push(sm[0], sm[1]); drag.obj.pr?.push(pressureOf(ev)); }
+      if ((sm[0] - lx) ** 2 + (sm[1] - ly) ** 2 >= 1.2) { pts.push(sm[0], sm[1]); { const pr = drag.obj.pr; if (pr) pr.push(smoothPressure(pr[pr.length - 1] ?? 0.5, pressureOf(ev))); } }
     } else if (drag.kind === "laser") drag.trail.push({ x: p.x, y: p.y, t: performance.now() });
     else if (drag.kind === "sel") {
       if (drag.free) selPath!.push([p.x, p.y]); else selPath = rectPolygon(drag.x, drag.y, p.x, p.y);
@@ -673,6 +687,7 @@ cv.addEventListener("pointermove", (e) => {
 });
 
 function endDrag(e: PointerEvent) {
+  if (e.pointerType === "pen") { penDown = false; lastPenTime = performance.now(); }
   if (e.pointerType === "touch") { touches.delete(e.pointerId); if (touches.size < 2) gesture = null; }
   const d = drag;
   drag = null;

@@ -309,13 +309,15 @@ function drawStroke(ctx: CanvasRenderingContext2D, o: Stroke) {
     }
   } else {
     // Variable width (fountain, brush, or any pen with pressure): one round-capped segment per width.
-    const ws = strokeWidths(pen, pts, o.w, o.pr);
-    for (let i = 0; i < ws.length; i++) {
-      ctx.lineWidth = ws[i];
-      ctx.beginPath();
-      ctx.moveTo(pts[2 * i], pts[2 * i + 1]);
-      ctx.lineTo(pts[2 * i + 2], pts[2 * i + 3]);
-      ctx.stroke();
+    // Drawn as a chain of quadratic curves through the segment midpoints (like the constant-width pens), so corners are rounded and thickness changes gently.
+    const ws = strokeWidths(pen, pts, o.w, o.pr), n = pts.length / 2;
+    const mx = (i: number) => (pts[2 * i] + pts[2 * i + 2]) / 2, my = (i: number) => (pts[2 * i + 1] + pts[2 * i + 3]) / 2;
+    const piece = (fx: number, fy: number, cx: number, cy: number, tx: number, ty: number, w: number) => { ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.quadraticCurveTo(cx, cy, tx, ty); ctx.stroke(); };
+    if (n === 2) piece(pts[0], pts[1], (pts[0] + pts[2]) / 2, (pts[1] + pts[3]) / 2, pts[2], pts[3], ws[0]);
+    else {
+      piece(pts[0], pts[1], (pts[0] + mx(0)) / 2, (pts[1] + my(0)) / 2, mx(0), my(0), ws[0]);
+      for (let j = 1; j + 1 < n; j++) piece(mx(j - 1), my(j - 1), pts[2 * j], pts[2 * j + 1], mx(j), my(j), (ws[j - 1] + ws[j]) / 2);
+      piece(mx(n - 2), my(n - 2), (mx(n - 2) + pts[2 * n - 2]) / 2, (my(n - 2) + pts[2 * n - 1]) / 2, pts[2 * n - 2], pts[2 * n - 1], ws[n - 2]);
     }
   }
   ctx.restore();

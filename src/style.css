@@ -80,7 +80,7 @@ button.ghost { border-color: transparent; color: var(--muted); }
 .thumb.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .thumb canvas { cursor: pointer; align-self: auto; max-width: 100%; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); touch-action: manipulation; }
 .thumb span { font-size: 12px; color: var(--muted); }
-canvas { margin: 0 auto; background: #fff; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22); touch-action: none; align-self: flex-start; flex: none; cursor: crosshair; }
+canvas { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; margin: 0 auto; background: #fff; box-shadow: 0 2px 14px rgba(0, 0, 0, 0.22); touch-action: none; align-self: flex-start; flex: none; cursor: crosshair; }
 #cv.pan { cursor: grab; }
 #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: var(--brand); color: var(--on-brand); padding: 8px 16px; border-radius: 20px; opacity: 0; pointer-events: none; transition: 0.25s; z-index: 50; }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }

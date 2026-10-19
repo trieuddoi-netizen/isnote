@@ -10,6 +10,8 @@ export const PEN_STYLE: Record<PenKind, PenStyle> = {
   brush: { mul: 2.2, alpha: 1 },
 };
 export const MAX_SMOOTH = 5;
+/** Pressure from the Pencil is noisy: blend each new sample with the previous one. */
+export const smoothPressure = (prev: number, raw: number): number => Math.round((prev * 0.6 + raw * 0.4) * 100) / 100;
 export const NIB_ANGLE = (40 * Math.PI) / 180;
 
 /** Live smoothing: moves from `prev` towards `raw`; level 0 = off, 5 = very smooth (lags behind the pen). */
@@ -44,7 +46,8 @@ export function strokeWidths(kind: PenKind, pts: number[], base: number, pressur
     }
     out.push(Math.max(0.3, base * mul * f));
   }
-  if (kind === "brush" && out.length > 2) for (let i = 1; i + 1 < out.length; i++) out[i] = (out[i - 1] + 2 * out[i] + out[i + 1]) / 4; // soften jumps (single pass)
+  // Soften jumps: pressure and direction are noisy, so smooth the widths (two passes of 1-2-1) for every pen.
+  for (let pass = 0; pass < 2 && out.length > 2; pass++) { const c = out.slice(); for (let i = 1; i + 1 < out.length; i++) out[i] = (c[i - 1] + 2 * c[i] + c[i + 1]) / 4; }
   return out;
 }
 
